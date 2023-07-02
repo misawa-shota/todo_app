@@ -12,7 +12,9 @@ class TodoController extends Controller
      */
     public function index()
     {
-        return view('todos.index');
+        $todos = Todo::latest()->get();
+
+        return view('todos.index', compact('todos'));
     }
 
     /**
@@ -20,7 +22,7 @@ class TodoController extends Controller
      */
     public function create()
     {
-        //
+        return view('todos.create');
     }
 
     /**
@@ -28,7 +30,12 @@ class TodoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $todo = new Todo();
+        $todo->title = $request->input('title');
+        $todo->body = $request->input('body');
+        $todo->save();
+
+        return redirect()->route('todos.index')->with('flash_message', 'Todoを追加しました。');
     }
 
     /**
@@ -36,7 +43,7 @@ class TodoController extends Controller
      */
     public function show(Todo $todo)
     {
-        //
+        return view('todos.show', compact('todo'));
     }
 
     /**
@@ -44,7 +51,7 @@ class TodoController extends Controller
      */
     public function edit(Todo $todo)
     {
-        //
+        return view('todos.edit', compact('todo'));
     }
 
     /**
@@ -52,7 +59,11 @@ class TodoController extends Controller
      */
     public function update(Request $request, Todo $todo)
     {
-        //
+        $todo->title = $request->input('title');
+        $todo->body = $request->input('body');
+        $todo->update();
+
+        return redirect()->route('todos.show', compact('todo'))->with('flash_message', 'Todoを更新しました。');
     }
 
     /**
@@ -60,6 +71,8 @@ class TodoController extends Controller
      */
     public function destroy(Todo $todo)
     {
-        //
+        $todo->delete();
+
+        return redirect()->route('todos.index')->with('flash_message', 'Todoを削除しました');
     }
 }
