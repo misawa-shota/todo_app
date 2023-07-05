@@ -30,6 +30,15 @@ class TodoController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'title' => 'required',
+            'body' => 'required',
+        ],[
+            'title.required' => 'titleは必須です。',
+            'body.required' => 'bodyは必須です。',
+        ]);
+
+
         $todo = new Todo();
         $todo->title = $request->input('title');
         $todo->body = $request->input('body');
@@ -59,6 +68,14 @@ class TodoController extends Controller
      */
     public function update(Request $request, Todo $todo)
     {
+        $request->validate([
+            'title' => 'required',
+            'body' => 'required',
+        ],[
+            'title.required' => 'titleは必須です。',
+            'body.required' => 'bodyは必須です。',
+        ]);
+
         $todo->title = $request->input('title');
         $todo->body = $request->input('body');
         $todo->update();
